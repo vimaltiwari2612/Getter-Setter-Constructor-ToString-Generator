@@ -1,33 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html style="background: antiquewhite;font-weight: bold;">
+	<style>
+	.generate {
+	  padding: 15px 25px;
+	  font-size: 24px;
+	  text-align: center;
+	  cursor: pointer;
+	  outline: none;
+	  color: #fff;
+	  background-color: #4CAF50;
+	  border: none;
+	  border-radius: 15px;
+	  box-shadow: 0 9px #999;
+	}
 
+	.generate:hover {background-color: #3e8e41}
+
+	.generate:active {
+	  background-color: #3e8e41;
+	  box-shadow: 0 5px #666;
+	  transform: translateY(4px);
+	}
+</style>
   <head>
   </head>
 	<title>POJO Utility</title>
   <body>
-	  Enter the variables' Definations : <br>
-    <textarea id="codeTextArea" placeholder="public int height;"style="width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textarea>
+	  Enter the variable's Definations : <br>
+    <textarea id="codeTextArea" placeholder="public int height;"style="width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textarea>
     <br />
 		Select the outputs : <br>
 		  <input type="checkbox" id="Getters" name="Getters" value="Getters">
 			<label for="Getters">Getters</label><br>
-			<textArea id="result" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<textArea id="result" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textArea><br>
 			<input type="checkbox" id="Setters" name="Setters" value="Setters">
 			<label for="Setters" >Setters</label><br>
-			<textArea id="result1" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<textArea id="result1" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textArea><br>
 			<input type="checkbox" id="Constructor" name="Constructor" value="Constructor">
 			<label for="Constructor">Constructor</label><br>
-			<textArea id="result2" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<textArea id="result2" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textArea><br>
 			<input type="checkbox" id="ToString" name="ToString" value="ToString">
-			<label for="ToString">ToString</label><br><br>
-			<textArea id="result3" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
-    <button onclick="generate();" id="generate">Generate</button>
+			<label for="ToString">ToString</label><br>
+			<textArea id="result3" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textArea><br>
+			<input type="checkbox" id="completeClass" name="completeClass" value="completeClass">
+			<label for="completeClass">Complete Class</label><br><br>
+			<textArea id="result4" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none;border: 2px solid #555;"></textArea><br>
+    <button onclick="generate();" class="generate">Generate</button>
 		<br><br>
 	
   </body>
   <script>
 		var code = null;
-		var getterSetterString = "";
+		
 		function generate(){
 		code = document.getElementById("codeTextArea");
 		var variables = code.value;
@@ -64,12 +88,46 @@
 				document.getElementById("result3").innerHTML =  "";
 				 document.getElementById("result3").style.display = "none"
 			}
+			if(document.getElementById("completeClass").checked){
+					generateCompleteClass(variables);
+					document.getElementById("result4").style.display = "block";
+			}else{
+				document.getElementById("result4").innerHTML =  "";
+				 document.getElementById("result4").style.display = "none"
+			}
+			
 			  
 		} else {
 		alert("Put some code in Code area");
 		}
 		}
+		
+		function resetAll(){
+			document.getElementById("result").innerHTML =  "";
+			document.getElementById("result1").innerHTML =  "";
+			document.getElementById("result2").innerHTML =  "";
+			document.getElementById("result3").innerHTML =  "";
+		}
 
+		function generateCompleteClass(variables){
+			generateGetters(variables);
+			generateSetters(variables);
+			generateConstructor(variables);
+			generateToString(variables);
+			
+			var completeClassString = "public CLASS_NAME{\n\n";
+			completeClassString += variables+"\n";
+			completeClassString += document.getElementById("result2").innerHTML+"\n\n";
+			completeClassString += document.getElementById("result").innerHTML+"\n\n";
+			completeClassString += document.getElementById("result1").innerHTML+"\n\n";
+			completeClassString += document.getElementById("result3").innerHTML+"\n\n";
+			completeClassString +="\n\n}"
+			
+			document.getElementById("result4").innerHTML = "";
+			document.getElementById("result4").innerHTML = completeClassString;
+			
+		}
+		
 		function generateToString(variables){
 		var toString = "";
 			var constructorBody = "";
@@ -210,7 +268,7 @@
 
 			setterString += finalLine + "\n";
 		  }
-				console.log(getterSetterString);
+				
 				
 				document.getElementById("result1").innerHTML =  "";
 					document.getElementById("result1").innerHTML += setterString;
