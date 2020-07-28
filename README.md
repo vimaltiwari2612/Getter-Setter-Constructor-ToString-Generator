@@ -8,4 +8,4 @@
 
 ![ScreenShot](https://github.com/vimaltiwari2612/Getter-Setter-Constructor-ToString-Generator/blob/master/2.png)
 
-[Demo](https://github.com/vimaltiwari2612/Getter-Setter-Constructor-ToString-Generator/blob/master/Demo.mp4)
+[Demo](https://github.com/vimaltiwari2612/Getter-Setter-Constructor-ToString-Generator/blob/master/Demo.mp4?raw=true)
