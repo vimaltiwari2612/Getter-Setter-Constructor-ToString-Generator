@@ -131,7 +131,7 @@
 		function generateToString(variables){
 		var toString = "";
 			var constructorBody = "";
-			var finalLine = "public toString(){\n\t return ";
+			var finalLine = "public String toString(){\n\t return ";
 		 var vals = variables.split("\n");
 		for (var k in vals) {
 		  if (vals[k] != null && vals[k].trim() !== "" && vals[k] != undefined) {
