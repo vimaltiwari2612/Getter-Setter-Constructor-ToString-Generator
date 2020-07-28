@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  </head>
+	<title>POJO Utility</title>
+  <body>
+	  Enter the variables' Definations : <br>
+    <textarea id="codeTextArea" placeholder="public int height;"style="width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textarea>
+    <br />
+		Select the outputs : <br>
+		  <input type="checkbox" id="Getters" name="Getters" value="Getters">
+			<label for="Getters">Getters</label><br>
+			<textArea id="result" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<input type="checkbox" id="Setters" name="Setters" value="Setters">
+			<label for="Setters" >Setters</label><br>
+			<textArea id="result1" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<input type="checkbox" id="Constructor" name="Constructor" value="Constructor">
+			<label for="Constructor">Constructor</label><br>
+			<textArea id="result2" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+			<input type="checkbox" id="ToString" name="ToString" value="ToString">
+			<label for="ToString">ToString</label><br><br>
+			<textArea id="result3" style="display:none;width: 100%; overflow-y: auto; margin: 0px; height: 165px;resize:none"></textArea><br>
+    <button onclick="generate();" id="generate">Generate</button>
+		<br><br>
+	
+  </body>
+  <script>
+		var code = null;
+		var getterSetterString = "";
+		function generate(){
+		code = document.getElementById("codeTextArea");
+		var variables = code.value;
+		if (variables != null && variables.trim() !== "" && variables != undefined) {
+
+		if(document.getElementById("Getters").checked){
+				generateGetters(variables);
+				document.getElementById("result").style.display = "block"; 
+			}
+			else{
+			 document.getElementById("result").innerHTML =  "";
+			 document.getElementById("result").style.display = "none"; 
+			}
+			if(document.getElementById("Setters").checked){
+				generateSetters(variables);
+					document.getElementById("result1").style.display = "block"; 
+			}
+			else{
+				document.getElementById("result1").innerHTML =  "";
+				 document.getElementById("result1").style.display = "none";
+			}
+			if(document.getElementById("Constructor").checked){
+				generateConstructor(variables);
+					document.getElementById("result2").style.display = "block"; 
+			}
+			else{
+				document.getElementById("result2").innerHTML =  "";
+				 document.getElementById("result2").style.display = "none"
+			}
+			if(document.getElementById("ToString").checked){
+					generateToString(variables);
+					document.getElementById("result3").style.display = "block";
+			}else{
+				document.getElementById("result3").innerHTML =  "";
+				 document.getElementById("result3").style.display = "none"
+			}
+			  
+		} else {
+		alert("Put some code in Code area");
+		}
+		}
+
+		function generateToString(variables){
+		var toString = "";
+			var constructorBody = "";
+			var finalLine = "public toString(){\n\t return ";
+		 var vals = variables.split("\n");
+		for (var k in vals) {
+		  if (vals[k] != null && vals[k].trim() !== "" && vals[k] != undefined) {
+					vals[k] = vals[k].replace(";","");
+					vals[k] = vals[k].trim();
+			var line = vals[k].split(" ");
+			var datatypeAdded = false;
+			var nameAdded = false;
+			var bodyAdded = false;
+					var datatype = "";
+			for (var i in line) {
+						
+			  if (line[i].toLowerCase().trim() == "public" || line[i].toLowerCase().trim() == "private" || line[i].toLowerCase().trim() == "protected" || line[i].toLowerCase().trim() == "global" || line[i].toLowerCase().trim() == "static" || line[i].toLowerCase().trim() == "final") continue;
+						
+			  //else append the code
+			  if (!datatypeAdded) {
+			   
+				datatypeAdded = true;
+			  } else if (!nameAdded) {
+				finalLine += "\","+line[i]+" :\"+"+line[i]+"+";
+							nameAdded = true;
+							constructorBody += "\n\tthis."+line[i]+"="+line[i]+";";
+			  }
+					
+			}
+			toString = finalLine;
+		  }
+					toString = toString.substring(0,toString.length-1);
+					toString = toString.replace(",","");
+					toString +=";\n}";
+				  document.getElementById("result3").innerHTML =  "";
+					document.getElementById("result3").innerHTML += toString;
+		}
+		}
+
+		function generateConstructor(variables){
+			var constructorString = "";
+			var constructorBody = "";
+			var finalLine = "public CLASS_NAME(";
+		 var vals = variables.split("\n");
+		for (var k in vals) {
+		  if (vals[k] != null && vals[k].trim() !== "" && vals[k] != undefined) {
+					vals[k] = vals[k].replace(";","");
+					vals[k] = vals[k].trim();
+			var line = vals[k].split(" ");
+			var datatypeAdded = false;
+			var nameAdded = false;
+			var bodyAdded = false;
+					var datatype = "";
+			for (var i in line) {
+						
+			  if (line[i].toLowerCase().trim() == "public" || line[i].toLowerCase().trim() == "private" || line[i].toLowerCase().trim() == "protected" || line[i].toLowerCase().trim() == "global" || line[i].toLowerCase().trim() == "static" || line[i].toLowerCase().trim() == "final") continue;
+						
+			  //else append the code
+			  if (!datatypeAdded) {
+				finalLine += line[i];
+				datatypeAdded = true;
+			  } else if (!nameAdded) {
+				finalLine += " "+line[i]+",";
+							nameAdded = true;
+							constructorBody += "\n\tthis."+line[i]+"="+line[i]+";";
+			  }
+					
+			}
+			constructorString = finalLine;
+		  }
+					constructorString = constructorString.substring(0,constructorString.length-1);
+					constructorString +="){"+constructorBody+"\n}";
+				  document.getElementById("result2").innerHTML =  "";
+					document.getElementById("result2").innerHTML += constructorString;
+		}
+		}
+
+		function generateGetters(variables){
+		var getterString = "";
+		 var vals = variables.split("\n");
+		for (var k in vals) {
+		  if (vals[k] != null && vals[k].trim() !== "" && vals[k] != undefined) {
+					vals[k] = vals[k].replace(";","");
+					vals[k] = vals[k].trim();
+			var line = vals[k].split(" ");
+			var finalLine = "public ";
+			var datatypeAdded = false;
+			var nameAdded = false;
+			var bodyAdded = false;
+			for (var i in line) {
+						
+			  if (line[i].toLowerCase().trim() == "public" || line[i].toLowerCase().trim() == "private" || line[i].toLowerCase().trim() == "protected" || line[i].toLowerCase().trim() == "global" || line[i].toLowerCase().trim() == "static" || line[i].toLowerCase().trim() == "final") continue;
+
+			  //else append the code
+			  if (!datatypeAdded) {
+				finalLine += line[i];
+				datatypeAdded = true;
+			  } else if (!nameAdded) {
+				finalLine += " get" + line[i].charAt(0).toUpperCase()+""+line[i].substring(1)+"(){\n\treturn "+line[i]+";\n}";
+							nameAdded = true;
+			  }
+			}
+		  getterString += finalLine + "\n";
+		  }
+			
+				  document.getElementById("result").innerHTML =  "";
+					document.getElementById("result").innerHTML += getterString;
+		}
+		}
+
+		function generateSetters(variables) {
+		var setterString = "";
+		 var vals = variables.split("\n");
+		for (var k in vals) {
+		  if (vals[k] != null && vals[k].trim() !== "" && vals[k] != undefined) {
+					vals[k] = vals[k].replace(";","");
+					vals[k] = vals[k].trim();
+			var line = vals[k].split(" ");
+			var finalLine = "public ";
+			var datatypeAdded = false;
+					var datatype = "";
+			var nameAdded = false;
+			var bodyAdded = false;
+			for (var i in line) {
+						
+			  if (line[i].toLowerCase().trim() == "public" || line[i].toLowerCase().trim() == "private" || line[i].toLowerCase().trim() == "protected" || line[i].toLowerCase().trim() == "global" || line[i].toLowerCase().trim() == "static" || line[i].toLowerCase().trim() == "final") continue;
+
+			  //else append the code
+			  if (!datatypeAdded) {
+				finalLine += "void";
+				datatypeAdded = true;
+							datatype = line[i];
+			  } else if (!nameAdded) {
+				finalLine += " set" + line[i].charAt(0).toUpperCase()+""+line[i].substring(1)+"("+datatype+" "+line[i]+"){\n\tthis."+line[i]+"="+line[i]+";\n}";
+							nameAdded = true;
+			  }
+			}
+
+			setterString += finalLine + "\n";
+		  }
+				console.log(getterSetterString);
+				
+				document.getElementById("result1").innerHTML =  "";
+					document.getElementById("result1").innerHTML += setterString;
+		}
+
+		}
+  </script>
+</html>
